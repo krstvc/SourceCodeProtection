@@ -14,6 +14,7 @@ import srcprotect.crypt.Decryptor;
 import srcprotect.crypt.Encryptor;
 import srcprotect.users.User;
 import srcprotect.users.Users;
+import srcprotect.utils.CodeCompiler;
 import srcprotect.utils.Files;
 import srcprotect.utils.logging.CustomLogger;
 
@@ -22,7 +23,6 @@ import java.io.IOException;
 import java.security.KeyPair;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Random;
 import java.util.logging.Level;
 
 /**
@@ -126,9 +126,9 @@ public class EncryptionWindowController {
                 System.getProperty("user.home") + File.separator
                         + "Documents" + File.separator + "srcprotect"));
 
-        /* Encrypted files are in form of a simple binary data file */
+        /* Encrypted files are in form of a simple binary file with extension .encrypted */
         chooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Encrypted Java source code", "*.dat")
+                new FileChooser.ExtensionFilter("Encrypted Java source code", "*.java.encrypted")
         );
         File file = chooser.showOpenDialog(new Stage());
 
@@ -178,7 +178,9 @@ public class EncryptionWindowController {
                     Files.getUserCertificateLocation(recipient.getUsername())
             );
 
-            byte[] bytesFromFile = java.nio.file.Files.readAllBytes(new File(plaintextFileLabel.getText()).toPath());
+            File file = new File(plaintextFileLabel.getText());
+            byte[] bytesFromFile = java.nio.file.Files.readAllBytes(file.toPath());
+
             ASN1ObjectIdentifier algorithm;
             String algorithmID = algorithmLabel.getText();
             switch (algorithmID) {
@@ -208,10 +210,10 @@ public class EncryptionWindowController {
                         "Success",
                         "File encrypted successfully"
                 );
-                Random random = new Random();
-                String fileName = "encrypted_file_" + random.nextInt(1000) + ".dat";
-                File file = new File(Files.getUserDir(recipient.getUsername()) + File.separator + fileName);
-                java.nio.file.Files.write(file.toPath(), encrypted);
+
+                String fileName = file.getName() + ".encrypted";
+                File encryptedFile = new File(Files.getUserDir(recipient.getUsername()) + File.separator + fileName);
+                java.nio.file.Files.write(encryptedFile.toPath(), encrypted);
             } else {
                 PopUp.displayErrorInfo(
                         "Error",
@@ -239,7 +241,8 @@ public class EncryptionWindowController {
                     Files.getUserCertificateLocation(sender.getUsername())
             );
 
-            byte[] bytesFromFile = java.nio.file.Files.readAllBytes(new File(cryptedFileLabel.getText()).toPath());
+            File file = new File(cryptedFileLabel.getText());
+            byte[] bytesFromFile = java.nio.file.Files.readAllBytes(file.toPath());
 
             Decryptor decryptor = new Decryptor(recipientKeyPair, senderCert);
 
@@ -251,12 +254,12 @@ public class EncryptionWindowController {
                         "Success",
                         "File decrypted successfully"
                 );
-                Random random = new Random();
-                String fileName = "decrypted_file_" + random.nextInt(1000) + ".java";
-                File file = new File(Files.getUserDir(recipient.getUsername()) + File.separator + fileName);
-                java.nio.file.Files.write(file.toPath(), decrypted);
 
-                //todo run program
+                String fileName = file.getName().replace(".encrypted", "");
+                File decryptedFile = new File(Files.getUserDir(recipient.getUsername()) + File.separator + fileName);
+                java.nio.file.Files.write(decryptedFile.toPath(), decrypted);
+
+                CodeCompiler.compileAndRun(decryptedFile);
             } else {
                 PopUp.displayErrorInfo(
                         "Error",

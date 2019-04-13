@@ -54,18 +54,25 @@ public class Decryptor {
      * @return decrypted contents of the file, which contain the attached signature, or null if any error occurs
      */
     private byte[] decryptContent(byte[] content) {
+        CMSEnvelopedData envelopedData;
         try {
-            CMSEnvelopedData envelopedData = new CMSEnvelopedData(content);
-
-            Collection<RecipientInformation> recipients = envelopedData.getRecipientInfos().getRecipients();
-            KeyTransRecipientInformation recipientInfo = (KeyTransRecipientInformation) recipients.iterator().next();
-            JceKeyTransRecipient recipient = new JceKeyTransEnvelopedRecipient(recipientKeyPair.getPrivate());
-
-            return recipientInfo.getContent(recipient);
+            envelopedData = new CMSEnvelopedData(content);
         } catch (CMSException exception) {
-            CustomLogger.log(Level.WARNING, "Unable to decrypt file, might be corrupt", exception);
+            CustomLogger.log(Level.WARNING, "Encrypted file content might be corrupt", exception);
             return null;
         }
+
+        Collection<RecipientInformation> recipients = envelopedData.getRecipientInfos().getRecipients();
+        KeyTransRecipientInformation recipientInfo = (KeyTransRecipientInformation) recipients.iterator().next();
+        JceKeyTransRecipient recipient = new JceKeyTransEnvelopedRecipient(recipientKeyPair.getPrivate());
+
+        try {
+            return recipientInfo.getContent(recipient);
+        } catch (CMSException exception) {
+            CustomLogger.log(Level.WARNING, "Recipient information not valid", exception);
+            return null;
+        }
+
     }
 
     /**
@@ -85,9 +92,7 @@ public class Decryptor {
             Collection<X509CertificateHolder> certs = signedData.getCertificates().getMatches(signerInfo.getSID());
             X509CertificateHolder certHolder = certs.iterator().next();
 
-            /*
-             * If the specified sender is not the owner of the certificate contained in the file header, verification fails
-             */
+            /* If the specified sender is not the owner of the certificate contained in the file header, verification fails */
             X509Certificate certificate = new JcaX509CertificateConverter().getCertificate(certHolder);
             if (!extractCN(certificate.getSubjectDN().getName()).equals(extractCN(senderCertificate.getSubjectDN().getName()))) {
                 CustomLogger.log(Level.WARNING, "File was not signed by the selected sender", new Exception());
