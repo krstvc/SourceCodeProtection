@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="334.0" prefWidth="500.0" style="-fx-background-color: #063852;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="srcprotect.ui.EncryptionWindowController">
+    <children>
+      <ComboBox fx:id="modeSelectionBox" layoutX="139.0" layoutY="14.0" onAction="#switchMode" prefHeight="31.0" prefWidth="222.0" promptText="Encryption/Decryption mode" style="-fx-background-color: #215367; -fx-border-color: #e6df44; -fx-border-radius: 5; -fx-font-size: 13;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <DropShadow spread="0.22" />
+         </effect>
+      </ComboBox>
+        <AnchorPane fx:id="encryptionModePane" layoutY="60.0" prefHeight="262.0" prefWidth="476.0" style="-fx-background-color: #011a27; -fx-background-radius: 5;" visible="false" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="60.0">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutY="13.0" prefHeight="237.0" prefWidth="452.0" spacing="6.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="13.0">
+               <padding>
+                  <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+               </padding>
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="440.0" spacing="12.0">
+                     <children>
+                        <MenuBar prefHeight="25.0" prefWidth="180.0" style="-fx-background-color: #215367;" HBox.hgrow="ALWAYS">
+                          <menus>
+                            <Menu fx:id="recipientMenu" mnemonicParsing="false" style="-fx-text-fill: #e6df44;" text="Recipient" />
+                            <Menu fx:id="algorithmMenu" mnemonicParsing="false" text="Algorithm">
+                                 <items>
+                                    <MenuItem id="DES_EDE3_CBC" mnemonicParsing="false" onAction="#setAlgorithm" text="Triple DES (CBC mode)" />
+                                    <MenuItem id="AES128_CBC" mnemonicParsing="false" onAction="#setAlgorithm" text="128bit AES (CBC mode)" />
+                                    <MenuItem id="AES256_CBC" mnemonicParsing="false" onAction="#setAlgorithm" text="256bit AES (CBC mode)" />
+                                    <MenuItem id="CAMELLIA128_CBC" mnemonicParsing="false" onAction="#setAlgorithm" text="128bit Camellia (CBC mode)" />
+                                    <MenuItem id="CAMELLIA256_CBC" mnemonicParsing="false" onAction="#setAlgorithm" text="256bit Camellia (CBC mode)" />
+                                 </items>
+                            </Menu>
+                          </menus>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets bottom="6.0" right="100.0" top="6.0" />
+                           </HBox.margin>
+                        </MenuBar>
+                        <Button fx:id="plaintextFileSelectionButton" mnemonicParsing="false" onAction="#selectFileToEncrypt" onMousePressed="#clicked" onMouseReleased="#clickFinished" prefHeight="31.0" prefWidth="150.0" style="-fx-background-color: #063852; -fx-border-color: #e6df44; -fx-border-radius: 5;" text="Select a file" textAlignment="RIGHT" textFill="#e6df44" HBox.hgrow="NEVER">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="440.0">
+                     <children>
+                        <Label text="Recipient: " textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="recipientLabel" textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </padding>
+                  </HBox>
+                  <HBox prefHeight="34.0" prefWidth="428.0">
+                     <children>
+                        <Label text="File: " textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="plaintextFileLabel" textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </padding>
+                  </HBox>
+                  <HBox layoutX="22.0" layoutY="136.0" prefHeight="34.0" prefWidth="428.0">
+                     <children>
+                        <Label text="Algorithm: " textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="algorithmLabel" textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="65.0" prefWidth="440.0">
+                     <children>
+                        <Button fx:id="encryptAndSendButton" mnemonicParsing="false" onAction="#encryptAndSendFile" onMousePressed="#clicked" onMouseReleased="#clickFinished" prefHeight="28.0" prefWidth="140.0" style="-fx-text-fill: #e6df44; -fx-border-color: #e6df44; -fx-border-radius: 5; -fx-background-color: #063852;" text="Encrypt and send" textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+        </AnchorPane>
+      <AnchorPane fx:id="decryptionModePane" layoutX="12.0" layoutY="60.0" prefHeight="262.0" prefWidth="476.0" style="-fx-background-color: #011a27; -fx-background-radius: 5;" visible="false">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutY="13.0" prefHeight="237.0" prefWidth="452.0" spacing="6.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="13.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="440.0" spacing="12.0">
+                     <children>
+                        <ComboBox fx:id="senderSelectionBox" onAction="#selectSender" prefHeight="31.0" prefWidth="155.0" promptText="Select a sender" style="-fx-background-color: #215367; -fx-text-fill: #e6df44; -fx-border-color: #e6df44; -fx-border-radius: 5; -fx-prompt-text-fill: #e6df44; -fx-font-size: 13;">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ComboBox>
+                        <Button fx:id="cryptedFileSelectionButton" mnemonicParsing="false" onAction="#selectFileToDecrypt" onMousePressed="#clicked" onMouseReleased="#clickFinished" prefHeight="31.0" prefWidth="132.0" style="-fx-background-color: #063852; -fx-border-color: #e6df44; -fx-border-radius: 5;" text="Select a file" textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="440.0">
+                     <children>
+                        <Label text="Sender: " textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="senderLabel" textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="34.0" prefWidth="428.0">
+                     <children>
+                        <Label text="File: " textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="cryptedFileLabel" textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="65.0" prefWidth="440.0">
+                     <children>
+                        <Button fx:id="decryptButton" mnemonicParsing="false" onAction="#decryptAndRunFile" onMousePressed="#clicked" onMouseReleased="#clickFinished" prefHeight="28.0" prefWidth="140.0" style="-fx-text-fill: #e6df44; -fx-border-color: #e6df44; -fx-border-radius: 5; -fx-background-color: #063852;" text="Decrypt" textFill="#e6df44">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+               </padding>
+            </VBox>
+         </children>
+      </AnchorPane>
+    </children>
+</AnchorPane>
