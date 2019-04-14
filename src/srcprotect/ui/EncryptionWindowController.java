@@ -47,7 +47,7 @@ public class EncryptionWindowController {
     private Label recipientLabel, plaintextFileLabel, algorithmLabel, senderLabel, cryptedFileLabel;
 
     @FXML
-    private Button encryptAndSendButton, decryptButton;
+    private Button encryptAndSendButton, decryptAndRunButton;
 
     public static User loggedUser;
 
@@ -77,7 +77,7 @@ public class EncryptionWindowController {
                         .or(plaintextFileLabel.textProperty().isEmpty())
         );
 
-        decryptButton.disableProperty().bind(
+        decryptAndRunButton.disableProperty().bind(
                 senderLabel.textProperty().isEmpty()
                         .or(cryptedFileLabel.textProperty().isEmpty()));
     }

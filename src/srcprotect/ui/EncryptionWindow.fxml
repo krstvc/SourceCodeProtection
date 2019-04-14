@@ -209,7 +209,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="65.0" prefWidth="440.0">
                      <children>
-                        <Button fx:id="decryptButton" mnemonicParsing="false" onAction="#decryptAndRunFile" onMousePressed="#clicked" onMouseReleased="#clickFinished" prefHeight="28.0" prefWidth="140.0" style="-fx-text-fill: #e6df44; -fx-border-color: #e6df44; -fx-border-radius: 5; -fx-background-color: #063852;" text="Decrypt" textFill="#e6df44">
+                        <Button fx:id="decryptAndRunButton" mnemonicParsing="false" onAction="#decryptAndRunFile" onMousePressed="#clicked" onMouseReleased="#clickFinished" prefHeight="28.0" prefWidth="140.0" style="-fx-text-fill: #e6df44; -fx-border-color: #e6df44; -fx-border-radius: 5; -fx-background-color: #063852;" text="Decrypt and run" textFill="#e6df44">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
